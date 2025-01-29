@@ -20,9 +20,7 @@ exports.config = {
     // The path of the spec files will be resolved relative from the directory of
     // of the config file unless it's absolute.
     //
-    specs: [
-        './test/specs/**/*.js'
-    ],
+    specs: ["./test/specs/**/*.js"],
     // Patterns to exclude.
     exclude: [
         // 'path/to/excluded/files'
@@ -84,17 +82,17 @@ exports.config = {
     // with `/`, the base url gets prepended, not including the path portion of your baseUrl.
     // If your `url` parameter starts without a scheme or `/` (like `some/path`), the base url
     // gets prepended directly.
-    // baseUrl: 'http://localhost:8080',
+    baseUrl: 'https://demo.evershop.io/',
     //
     // Default timeout for all waitFor* commands.
-    waitforTimeout: 10000,
+    waitforTimeout: 30000,
     //
     // Default timeout in milliseconds for request
     // if browser driver or grid doesn't send response
-    connectionRetryTimeout: 120000,
+    connectionRetryTimeout: 150000,
     //
     // Default request retries count
-    connectionRetryCount: 3,
+    connectionRetryCount: 5,
     //
     // Test runner services
     // Services take over a specific job you don't want to take care of. They enhance
@@ -129,7 +127,7 @@ exports.config = {
     // See the full list at http://mochajs.org/
     mochaOpts: {
         ui: 'bdd',
-        timeout: 60000
+        timeout: 120000
     },
 
     //
@@ -176,6 +174,7 @@ exports.config = {
      * @param {string} cid worker id (e.g. 0-0)
      */
     // beforeSession: function (config, capabilities, specs, cid) {
+        
     // },
     /**
      * Gets executed before test execution begins. At this point you can access to all global
@@ -197,8 +196,10 @@ exports.config = {
      * Hook that gets executed before the suite starts
      * @param {object} suite suite details
      */
-    // beforeSuite: function (suite) {
-    // },
+    beforeSuite: async function (suite) {
+        await browser.maximizeWindow();
+        await browser.url(this.baseUrl);
+    },
     /**
      * Function to be executed before a test (in Mocha/Jasmine) starts.
      */
@@ -234,8 +235,9 @@ exports.config = {
      * Hook that gets executed after the suite has ended
      * @param {object} suite suite details
      */
-    // afterSuite: function (suite) {
-    // },
+    afterSuite: async function (suite) {
+        await browser.quit();
+    },
     /**
      * Runs after a WebdriverIO command gets executed
      * @param {string} commandName hook command name
